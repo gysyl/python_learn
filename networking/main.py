@@ -15,3 +15,5 @@ if __name__ == "__main__":
     u = build_url("https://example.com", {"q": "python", "page": 1})
     print(u)
     print(parse_params(u))
+
+

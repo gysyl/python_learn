@@ -155,6 +155,17 @@ def main() -> None:
         )
         print(result)
 
+# python中的变量和数据类型
+# 变量：用于存储数据的容器，每个变量都有一个唯一的名称（标识符）。
+# 数据类型：变量可以存储不同类型的数据，如整数、浮点数、字符串等。
+# 整数（int）： whole numbers without a decimal point.
+print(f"二进制整数0b100 = {0b100}")  # 二进制整数
+print(f"0o100 = {0o100}")  # 八进制整数
+print(f"100 = {100}")    # 十进制整数
+print(f"0x100 = {0x100}")  # 十六进制整数
+# 浮点数（float）： numbers with a decimal point.
+# 字符串（str）： sequences of characters enclosed in single or double quotes.
+# 布尔值（bool）： True or False.
 
 if __name__ == "__main__":
     # 作为脚本运行时进入命令行逻辑；被其他模块导入时不会执行。
