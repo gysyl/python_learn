@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}我的书站{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+  <header>
+    <h1>我的书站</h1>
+    <nav>
+      <a href="/hello/">首页</a>
+      <a href="/books/">图书列表</a>
+    </nav>
+  </header>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+  <footer>
+    <p>学习 Django 模版演示页</p>
+  </footer>
+</body>
+</html>
