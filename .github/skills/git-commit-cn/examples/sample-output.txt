@@ -1,0 +1,9 @@
+feat: 新增用户更新接口并优化用户卡片展示
+
+详细说明
+- 添加 updateUser 方法，支持 POST 更新用户数据
+- 调整 UserCard 组件展示字段为 nickname
+
+影响范围
+- src/api/user.js
+- src/components/UserCard.vue

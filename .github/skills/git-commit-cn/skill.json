@@ -1,0 +1,28 @@
+{
+  "name": "Auto Commit & Push (Chinese)",
+  "description": "自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行提交推送",
+  "commands": [
+    {
+      "trigger": "提交并推送",
+      "description": "自动提交并推送当前更改"
+    },
+    {
+      "trigger": "自动提交",
+      "description": "自动生成提交信息并提交"
+    },
+    {
+      "trigger": "帮我 push",
+      "description": "推送更改到远程仓库"
+    },
+    {
+      "trigger": "一键提交",
+      "description": "快速提交并推送"
+    }
+  ],
+  "resources": [
+    "scripts/get-diff.sh",
+    "scripts/commit-and-push.sh",
+    "resources/commit-style-guide.md",
+    "resources/keywords.json"
+  ]
+}

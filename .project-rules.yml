@@ -1,0 +1,172 @@
+version: 1.0
+format: markdown
+metadata:
+  project: python_learn
+  environment: Windows + WSL + venv + requirements.txt
+  last_updated: 2026-01-08
+  maintainers: []
+  scope: project
+
+sections:
+  - id: code_style
+    title: 代码规范要求
+    content: |-
+      ## 代码风格指南
+      - 缩进: 使用 4 空格; 禁止 Tab
+      - 命名: variables/functions 使用 snake_case; Classes 使用 PascalCase; constants 使用 UPPER_CASE
+      - 注释: 对关键逻辑、边界条件、资源访问添加简明中文注释; 文件头包含文件名、作者、日期、描述
+      - 导入: 采用标准库、第三方库、本地模块顺序; 避免通配符导入
+      - 类型: 使用 typing 注解; 必要时添加 TypedDict 或 Protocol
+      - 字符串: 优先 f-string; 避免拼接
+      - 日志: 使用 logging; 禁止在生产代码中保留 print
+
+      ## 代码组织结构
+      - 顶层目录
+        - src/: 教学与示例代码
+        - tests/: 单元与集成测试
+        - scripts/: CLI 与运维脚本
+        - docs/: 项目与 API 文档
+        - .venv/: 项目虚拟环境 (WSL 下创建)
+        - requirements.txt: 依赖清单
+      - 模块划分
+        - 单一职责; 避免跨层耦合; 共享工具放在 src/common
+        - Django 场景: settings、apps、views、models、tests 按标准结构组织
+      - 复杂度控制
+        - 每函数 ≤ 25 行; 超过需拆分
+        - 每模块 ≤ 200 行; 超过需分包
+        - 嵌套深度 ≤ 3 层; 出现时需重构
+
+      ## 代码审查流程与标准
+      - PR 要求: 小步提交; 通过 CI; 附变更摘要与影响说明
+      - 核查清单
+        - 命名清晰; 单一职责; 类型标注完整
+        - 错误处理与日志合理; 无硬编码 secrets
+        - 测试覆盖变化说明; 文档更新同步
+        - 性能与边界用例考虑; 资源释放得当
+
+  - id: dev_process
+    title: 开发流程规范
+    content: |-
+      ## 版本控制
+      - 分支策略
+        - main: 稳定分支; 仅合并已通过审查与 CI 的变更
+        - dev: 日常集成; 可频繁合并 feature
+        - feature/*: 新功能或实验
+        - hotfix/*: 紧急修复
+      - 提交消息 (Conventional Commits)
+        - feat: 新功能; fix: 修复; docs: 文档; chore: 构建/依赖; test: 测试; refactor: 重构; perf: 性能
+        - 示例: "feat(auth): 支持登录失败重试与锁定策略"
+      - 合并策略
+        - 优先使用 squash merge; 保持历史简洁
+        - 遇到冲突需本地解决并附说明
+
+      ## 构建与部署
+      - Windows + WSL 环境
+        - 在 WSL 中创建并使用 venv: "python3 -m venv .venv" ; "source .venv/bin/activate"
+        - 依赖安装: "python -m pip install -r requirements.txt"
+        - 行尾规范: 配置 Git 使用 LF; "git config core.autocrlf input"
+      - 运行
+        - 教学脚本: "python src/<module>.py"
+        - Django 项目: "python manage.py runserver" (如存在)
+      - 部署
+        - 学习项目不进行生产部署; 如需服务化, 使用 WSL 内部调试或容器化方案
+
+      ## 依赖管理
+      - 统一使用 requirements.txt; 禁止在全局 Python 环境安装项目依赖
+      - 锁定策略
+        - 固定关键库版本; 对安全性与兼容性敏感库采用精确版本
+        - 定期执行 "pip-compile" 或 "pip freeze > requirements.lock.txt" 以便可重复安装
+      - 安全与健壮
+        - 使用 "python -m pip" 避免 shell 别名干扰
+        - 定期执行 "pip list --outdated" 并评估升级
+
+  - id: quality
+    title: 质量保证要求
+    content: |-
+      ## 单元测试
+      - 框架: pytest
+      - 目录: tests/unit
+      - 覆盖率: 总体 ≥ 80%; 核心模块 ≥ 90%
+      - 运行: "pytest -q" ; 覆盖率: "pytest --cov=src --cov-report=term-missing"
+
+      ## 集成测试
+      - 目录: tests/integration
+      - 场景: I/O、网络、数据库、Django 视图与路由
+      - 标注: 使用 pytest 标记 "integration" 以区分
+
+      ## 性能基准
+      - 指标
+        - 热路径函数: 目标减少 ≥ 20% 运行时间
+        - 数据处理脚本: 针对典型样本集内存峰值与耗时统计
+        - Django 启动时间与首个请求响应时间有基线记录
+      - 工具: pytest-benchmark 或 timeit; 基准数据存放在 docs/perf
+
+  - id: security
+    title: 安全规范
+    content: |-
+      ## 敏感数据处理
+      - 禁止提交 secrets; 使用环境变量与 ".env" 文件; 添加 ".env" 到 ".gitignore"
+      - 配置示例文件: ".env.example" 不包含真实值
+      - 日志中勿打印 tokens、password、credentials
+
+      ## 认证与授权
+      - Django
+        - 使用内置密码哈希与 CSRF 防护; 配置 "SECURE_*" 与 "SESSION_*" 选项
+        - 权限控制走 DRF/自定义装饰器; 避免在视图中直接硬编码
+      - CLI/脚本
+        - 访问外部服务必须使用环境变量注入 credentials
+
+      ## 漏洞防护
+      - 依赖审计: "pip-audit" 或 "safety" 定期执行; 报告存放在 docs/security
+      - 代码扫描: "bandit" 用于静态检查; 排除测试与迁移目录
+      - 输入校验: 对 I/O、网络、文件路径进行校验与异常处理
+
+  - id: docs
+    title: 文档标准
+    content: |-
+      ## API 文档
+      - 采用 docstring; 参数、返回值、异常清晰
+      - 可选生成工具: pdoc 或 Sphinx; 生成到 docs/api
+
+      ## 项目文档更新流程
+      - 每次功能或接口变更需更新 README 与相关文档
+      - 变更日志: 维护 CHANGELOG.md; 使用语义化条目
+      - 教学说明: 在 docs/tutorials 添加示例与说明
+
+      ## 技术决策记录 (ADR)
+      - 位置: docs/adr
+      - 模板: 见下方 "templates.adr"
+      - 任何架构或重要技术选型需提交 ADR 并审查
+
+  - id: templates
+    title: 模板
+    content: |-
+      ## 提交消息模板
+      - <type>(scope): subject
+      - body: 变更动机、实现要点、影响范围
+      - footer: 关联 issue/ADR/文档链接
+
+      ## PR 模板要点
+      - 变更摘要; 相关 issue; 测试说明; 回滚策略; 风险评估
+      - 勾选审查清单: 命名、类型、日志、错误处理、测试、文档、安全
+
+      ## ADR 模板
+      - Title: 简洁表述决策主题
+      - Context: 背景与约束
+      - Decision: 选择与理由
+      - Alternatives: 备选方案与权衡
+      - Consequences: 正负面影响与后续计划
+
+enforcement:
+  optional_tools:
+    - pre-commit
+    - ruff
+    - isort
+    - black
+    - bandit
+    - pip-audit
+    - pytest
+  guidance: |-
+    - 若启用 pre-commit, 在仓库根目录添加 ".pre-commit-config.yaml", 集成格式化与安全检查
+    - CI 可在 WSL 或容器环境中运行 "pytest" 与基础静态检查
+    - 所有规则以学习与实践为目的; 在不影响教学目标的前提下优先保持清晰与可维护
