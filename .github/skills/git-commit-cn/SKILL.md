@@ -1,39 +1,46 @@
 ---
 name: git-commit-cn
-description: 自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行提交推送
-keywords:
-  - 提交并推送
-  - 自动提交
-  - 帮我 push
-  - 一键提交
+description: 自动提交当前Git仓库的所有变更到远程，包括自动生成中文提交信息
 ---
 
-# Skill: Auto Commit & Push (Chinese)
+# Git自动提交推送技能
 
-自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行 git add、git commit、git push。
+这个技能帮助你快速提交并推送Git仓库的变更。
 
-## When to use
+## 使用场景
 
-当用户说：
-- "提交并推送"
-- "自动提交"
-- "帮我 push"
-- "一键提交"
+当你需要：
+- 快速提交当前工作目录的所有变更
+- 自动生成中文提交信息
+- 一键推送到远程仓库
 
-## What it does
+## 操作步骤
 
-1. 检查git状态 - 获取当前工作目录的git变更
-2. 分析变更 - 识别新增、修改、删除的文件  
-3. 生成提交信息 - 根据变更自动生成中文提交说明
-4. 执行git操作 - 自动执行 git add、git commit、git push
-5. 反馈结果 - 告知用户提交是否成功
+1. **检查变更** - 获取当前Git仓库的所有变更（新增、修改、删除的文件）
+2. **分析内容** - 分析Git diff以理解具体改动内容
+3. **生成提交信息** - 根据变更内容自动生成简洁、有意义的中文提交信息
+4. **执行提交** - 运行 `git add .` 和 `git commit` 命令
+5. **推送更改** - 运行 `git push` 将提交推送到远程仓库
+6. **反馈结果** - 报告提交和推送是否成功
 
-## Example
+## 示例
 
-User: "提交并推送"
+**用户请求：** "帮我提交并推送"
 
-Assistant will:
-- Check git status and identify changes
-- Generate a meaningful commit message in Chinese
-- Execute git add, commit, and push commands
-- Report the result to the user
+**技能执行流程：**
+- 检查git status找到所有未提交的变更
+- 自动生成类似"feat: 新增测试文件和配置"这样的提交信息
+- 执行git add .、git commit -m "..."、git push
+- 报告"✓ 提交成功，已推送到远程"
+
+## 前置条件
+
+- 当前目录必须是一个Git仓库
+- 必须配置好Git远程仓库（origin）
+- 必须有待提交的变更
+
+## 注意事项
+
+- 此技能会自动执行git add、commit、push命令
+- 如果没有变更，技能会提示"没有可提交的内容"
+- 如果push失败，会提示检查网络连接和远程仓库配置
