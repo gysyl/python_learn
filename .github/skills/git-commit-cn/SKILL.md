@@ -1,40 +1,24 @@
 # Skill: Auto Commit & Push (Chinese)
 
-## Description
-自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行 git add、git commit、git push。  
-结合“Auto Git Commit Message”技能使用，可实现全自动化提交流程。
+自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行 git add、git commit、git push。
 
 ## When to use
-当用户：
-- 输入“提交并推送”
-- 输入“自动提交”
-- 输入“帮我 push”
-- 输入“自动生成提交并推送”
-- 请求“一键提交”
 
-## Behavior
-### 1. 自动读取 Git 变更
-调用 `scripts/get-diff.sh` 获取：
-- staged diff
-- unstaged diff
-- 文件列表
+当用户说：
+- "提交并推送"
+- "自动提交"
+- "帮我 push"
+- "自动生成提交并推送"
+- "一键提交"
 
-### 2. 自动生成中文提交信息
-调用“Auto Git Commit Message”技能，根据 diff 自动生成提交说明。
+## What it does
 
-### 3. 自动执行 Git 操作
-调用 `scripts/commit-and-push.sh`：
-- `git add .`
-- `git commit -m "<自动生成的中文提交信息>"`
-- `git push`
+1. **检查git状态** - 获取当前工作目录的git变更
+2. **分析变更** - 识别新增、修改、删除的文件
+3. **生成提交信息** - 根据变更自动生成中文提交说明
+4. **执行git操作** - 自动执行 `git add .`、`git commit`、`git push`
+5. **反馈结果** - 告知用户提交是否成功
 
-### 4. 安全要求
-- 如果没有变更，提示用户“没有可提交的内容”
-- 如果 push 失败（如未设置远程），提示用户检查 Git 配置
-- 如果用户要求英文提交信息，则生成双语版本
+## Example
 
-## Resources
-- scripts/get-diff.sh
-- scripts/commit-and-push.sh
-- resources/commit-style-guide.md
-- resources/keywords.json
+User: "提交并推送"
