@@ -1,11 +1,11 @@
 ---
 name: git-commit-cn
 description: 自动读取当前 Git 仓库的变更，生成高质量中文提交信息，并执行提交推送
-triggers:
-  - "提交并推送"
-  - "自动提交"
-  - "帮我 push"
-  - "一键提交"
+keywords:
+  - 提交并推送
+  - 自动提交
+  - 帮我 push
+  - 一键提交
 ---
 
 # Skill: Auto Commit & Push (Chinese)
