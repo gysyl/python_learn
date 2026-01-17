@@ -10,8 +10,8 @@
 
 **项目名称**：python_learn
 **项目类型**：Python 学习与实战项目（自动化 / Web / 数据科学）
-**开发环境**：Windows + WSL2 + Python 3.12 + venv
-**包管理**：requirements.txt
+**开发环境**：Windows + WSL2 + Python 3.12 + uv
+**包管理**：uv (pyproject.toml)
 
 ### 项目结构
 ```
@@ -82,80 +82,61 @@ def 处理用户数据(用户列表: list) -> dict:  # 函数名不应使用中�
 
 ## 🔧 环境管理
 
-### ⚠️ 强制规则：必须使用虚拟环境
+### ⚠️ 强制规则：必须使用 uv 管理依赖
 
-**所有项目必须使用虚拟环境，禁止直接在全局 Python 环境中安装依赖或运行代码。**
+**本项目使用 uv 作为统一的包管理器，取代传统的 pip/venv 工作流。**
 
-#### 为什么必须使用虚拟环境？
+#### 为什么使用 uv？
 
-- 🔒 **隔离性**：避免不同项目的依赖冲突
-- 🧹 **清洁性**：保持全局 Python 环境干净
-- 📦 **可复现**：确保项目在不同机器上行为一致
-- 🛡️ **安全性**：防止影响系统工具或其他项目
+- 🚀 **速度**：比 pip 快 10-100 倍
+- 🔒 **锁定**：`uv.lock` 确保跨环境的绝对一致性
+- 📦 **统一**：集成了 python 版本管理、虚拟环境和包安装
+- 🛡️ **兼容**：完全兼容 pip 接口，但在项目中优先使用 uv 原生命令
 
-#### 虚拟环境使用规范
+#### uv 使用规范
 
 ```bash
-# 1. 创建虚拟环境（仅在首次）
-python3 -m venv .venv
+# 1. 初始化/同步环境（自动创建 .venv 并安装依赖）
+uv sync
 
 # 2. 激活虚拟环境
 # WSL/Linux
 source .venv/bin/activate
 # Windows PowerShell
-.venv\Scripts\Activate.ps1
-# Windows CMD
-.venv\Scripts\activate.bat
+.venv\Scripts\activate
 
-# 3. 安装依赖（必须在虚拟环境中）
-python -m pip install -r requirements.txt
+# 3. 添加新依赖
+uv add package_name
 
-# 4. 确认虚拟环境已激活
-# 命令提示符前应显示 (.venv)
-which python  # 应指向项目内的 .venv/bin/python
-
-# 5. 退出虚拟环境（完成工作后）
-deactivate
+# 4. 运行命令（推荐使用 uv run，无需显式激活）
+uv run python script.py
 ```
 
 #### AI 助手必须遵守
 
-✅ **始终检查虚拟环境状态：**
-- 执行任何 pip 安装前，确认虚拟环境已激活
-- 运行 Python 脚本时，使用虚拟环境中的 Python
-- 如果检测到未激活虚拟环境，先提示用户激活
+✅ **始终检查 uv 环境状态：**
+- 优先使用 `uv run` 执行脚本
+- 修改依赖时使用 `uv add` 或 `uv remove`
+- 确保 `uv.lock` 与 `pyproject.toml` 同步
 
 ❌ **禁止行为：**
-- ❌ 使用 `sudo pip install` 全局安装依赖
-- ❌ 在系统级 Python 环境中安装包
-- ❌ 假设虚拟环境已激活，需要先验证
+- ❌ 直接使用 `pip install` 修改环境（除非临时测试）
+- ❌ 手动修改 `requirements.txt`（应修改 `pyproject.toml`）
 
-#### 验证虚拟环境
-
-```bash
-# 检查当前 Python 路径
-which python
-# 输出应包含 .venv，如：/path/to/project/.venv/bin/python
-
-# 检查已安装的包
-pip list
-# 应只显示项目相关的包，而不是全局所有包
-```
-
-#### requirements.txt 管理
-
-- 所有依赖必须记录在 `requirements.txt` 中
-- 使用精确版本号锁定关键依赖
-- 定期更新依赖并测试兼容性
+#### 验证环境
 
 ```bash
-# 生成当前环境的依赖列表
-pip freeze > requirements.txt
-
-# 更新依赖（谨慎使用）
-pip install --upgrade package_name
-pip freeze > requirements.txt
+# 检查 uv 状态
+uv version
+# 检查依赖树
+uv tree
 ```
+
+#### 依赖管理
+
+- 所有依赖必须记录在 `pyproject.toml` 中
+- `uv.lock` 必须提交到版本控制
+
 
 ---
 
@@ -543,30 +524,33 @@ AI 助手在提交代码前应检查：
 - [ ] 导入顺序正确（标准库 → 第三方 → 本地）
 
 ### 常用命令参考
-
-```bash
-# 激活虚拟环境（WSL）
-source .venv/bin/activate
-
-# 安装依赖
-python -m pip install -r requirements.txt
-
-# 运行测试
-pytest -q
-
-# 运行特定测试
-pytest tests/test_module.py::test_function
-
-# 生成覆盖率报告
-pytest --cov=src --cov-report=term-missing
-
-# Django 运行服务器
-python manage.py runserver
-
-# Django 数据库迁移
-python manage.py makemigrations
-python manage.py migrate
-```
+ 
+ ```bash
+ # 激活虚拟环境（WSL）
+ source .venv/bin/activate
+ 
+ # 初始化/同步环境
+ uv sync
+ 
+ # 添加依赖
+ uv add package_name
+ 
+ # 运行测试
+ uv run pytest -q
+ 
+ # 运行特定测试
+ uv run pytest tests/test_module.py::test_function
+ 
+ # 生成覆盖率报告
+ uv run pytest --cov=src --cov-report=term-missing
+ 
+ # Django 运行服务器
+ uv run python manage.py runserver
+ 
+ # Django 数据库迁移
+ uv run python manage.py makemigrations
+ uv run python manage.py migrate
+ ```
 
 ---
 

@@ -2,14 +2,30 @@
 
 你每天投入 2 小时，本仓库帮你用“项目化 + 练习驱动”的方式同时推进三条路线：自动化、Web、数据科学。按周循序渐进，并提供示例与依赖清单。
 
-## 快速开始（Windows PowerShell）
-- 创建并启用虚拟环境：
-  - `python -m venv .venv`
-  - `./.venv/Scripts/Activate.ps1`
-- 选择方向后安装依赖（示例见各子目录的 `requirements.txt`）：
-  - 自动化：`pip install -r automation/requirements.txt`
-  - Web：`pip install -r web/requirements.txt`
-  - 数据科学：`pip install -r data_science/requirements.txt`
+## 快速开始
+
+本项目已迁移至 [uv](https://github.com/astral-sh/uv) 进行高效的依赖管理。
+
+### 1. 安装工具
+请先在系统安装 uv（如果尚未安装）：
+- **Windows**: `powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`
+- **Linux / WSL**: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+
+### 2. 初始化环境
+在项目根目录运行以下命令，将自动创建虚拟环境并同步依赖：
+```bash
+uv sync
+```
+
+### 3. 激活环境
+- **Linux / WSL**: `source .venv/bin/activate`
+- **Windows**: `.venv\Scripts\activate`
+
+### 4. 安装特定方向依赖
+核心依赖已包含在环境中。如需特定方向的额外库：
+- 自动化：`uv pip install -r automation/requirements.txt`
+- Web：`uv pip install -r web/requirements.txt`
+- 数据科学：`uv pip install -r data_science/requirements.txt`
 
 ## 仓库结构
 - `automation/` 自动化脚本与练习（文件批处理、Excel、抓取等）
