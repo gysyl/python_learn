@@ -66,3 +66,7 @@ def index(request):
         "author_count": author_count
     })
 
+def delete_book(request, book_id):
+    Book.objects.filter(id=book_id).delete()
+    return redirect('book_list')
+
