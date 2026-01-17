@@ -14,32 +14,13 @@ def add_book(request):
     return render(request, "books/add_book.html")
 
 def query_books(request):
-    # 1. 查询所有
-    all_books = Book.objects.all()
-    all_books_str = ", ".join([f"{b.name} ({b.author})" for b in all_books])
-
-    # 2. 条件过滤 (查找作者是 '龚毅' 的书)
-    gongyi_books = Book.objects.filter(author="龚毅")
-    gongyi_books_str = ", ".join([b.name for b in gongyi_books])
-
-    # 3. 获取单条 (查找第一本书，如果存在)
-    first_book = Book.objects.first()
-    first_book_str = first_book.name if first_book else "None"
-    
-    # 构造返回内容
-    result = f"""
-    <h1>Data Retrieval Examples</h1>
-    <h3>1. All Books:</h3>
-    <p>{all_books_str}</p>
-    
-    <h3>2. Books by '龚毅':</h3>
-    <p>{gongyi_books_str}</p>
-    
-    <h3>3. First Book:</h3>
-    <p>{first_book_str}</p>
-    """
-    
-    return HttpResponse(result)
+    query = request.GET.get('q', '')
+    if query:
+        books = Book.objects.filter(name__icontains=query) | Book.objects.filter(author__icontains=query)
+    else:
+        books = Book.objects.all()
+        
+    return render(request, "books/query_books.html", {"books": books, "query": query})
 
 def sort_books(request):
     # 按价格升序
@@ -72,4 +53,16 @@ def edit_book(request, book_id):
         return HttpResponse("Book updated successfully")
         
     return render(request, "books/edit_book.html", {"book": book})
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, "books/book_list.html", {"books": books})
+
+def index(request):
+    book_count = Book.objects.count()
+    author_count = Book.objects.values('author').distinct().count()
+    return render(request, "books/index.html", {
+        "book_count": book_count,
+        "author_count": author_count
+    })
 

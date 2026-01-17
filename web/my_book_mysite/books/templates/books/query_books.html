@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据查询 | Book Query</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a1a2e;
+            --gold: #d4a373;
+            --cream: #fefae0;
+            --dark-cream: #e9e5d6;
+            --shadow: rgba(26, 26, 46, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--dark-cream) 100%);
+            min-height: 100vh;
+            color: var(--navy);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--gold);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            width: 80px;
+            height: 3px;
+            background: var(--gold);
+            margin: 24px auto;
+        }
+
+        /* Search Box */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 60px;
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .search-form {
+            display: flex;
+            gap: 16px;
+            background: white;
+            padding: 8px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+            transition: all 0.3s;
+        }
+
+        .search-form:focus-within {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(212, 163, 115, 0.2);
+            border-color: var(--gold);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-family: 'Source Sans Pro', sans-serif;
+            color: var(--navy);
+            background: transparent;
+            outline: none;
+        }
+
+        .search-btn {
+            background: var(--navy);
+            color: var(--cream);
+            border: none;
+            padding: 0 32px;
+            border-radius: 40px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        /* Results Grid */
+        .results-info {
+            text-align: center;
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+            opacity: 0.7;
+            animation: fadeIn 1s ease-out 0.4s both;
+        }
+
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .book-item {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.4s;
+            animation: fadeInUp 0.6s ease-out both;
+            border-left: 4px solid transparent;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .book-item:hover {
+            transform: translateX(8px);
+            border-left-color: var(--gold);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .book-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
+
+        .book-meta {
+            color: #666;
+            display: flex;
+            gap: 16px;
+            font-size: 0.95rem;
+        }
+
+        .book-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            opacity: 0.6;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 60px;
+            color: var(--navy);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>藏书查询</h1>
+            <p class="subtitle">Search Collection</p>
+            <div class="divider"></div>
+        </header>
+
+        <div class="search-container">
+            <form method="get" class="search-form">
+                <input type="text" name="q" class="search-input" placeholder="输入书名或作者..." value="{{ query }}">
+                <button type="submit" class="search-btn">搜索</button>
+            </form>
+        </div>
+
+        {% if query %}
+        <div class="results-info">
+            找到 {{ books|length }} 本相关书籍
+        </div>
+        {% endif %}
+
+        {% if books %}
+        <div class="book-list">
+            {% for book in books %}
+            <div class="book-item" style="animation-delay: {{ forloop.counter0|add:'0.1' }}s">
+                <div class="book-info">
+                    <h3>{{ book.name }}</h3>
+                    <div class="book-meta">
+                        <span>✍ {{ book.author }}</span>
+                        <span>📅 {{ book.pub_time|date:"Y-m-d"|default:"未知日期" }}</span>
+                    </div>
+                </div>
+                <div class="book-price">¥{{ book.price }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-results">
+            <p style="font-size: 3rem;">🔍</p>
+            <p>没有找到匹配的书籍</p>
+        </div>
+        {% endif %}
+
+        <a href="/books/" class="back-link">← 返回主页</a>
+    </div>
+</body>
+
+</html>

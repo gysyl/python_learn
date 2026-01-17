@@ -1,26 +1,284 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <title>Add Book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加新书 | Add New Book</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --navy: #1a1a2e;
+            --gold: #d4a373;
+            --cream: #fefae0;
+            --dark-cream: #e9e5d6;
+            --shadow: rgba(26, 26, 46, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--dark-cream) 100%);
+            min-height: 100vh;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px var(--shadow);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            background: var(--navy);
+            padding: 40px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 163, 115, 0.1) 0%, transparent 60%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--cream);
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-header p {
+            color: var(--gold);
+            font-size: 0.95rem;
+            margin-top: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-body {
+            padding: 40px 32px;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+            animation: fadeIn 0.5s ease-out both;
+        }
+
+        .form-group:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .form-group label::before {
+            content: '◆';
+            color: var(--gold);
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1rem;
+            color: var(--navy);
+            background: var(--cream);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .form-group input:focus {
+            border-color: var(--gold);
+            background: white;
+            box-shadow: 0 4px 20px rgba(212, 163, 115, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 36px;
+            animation: fadeIn 0.5s ease-out 0.4s both;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold);
+            color: var(--navy);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--dark-cream);
+            color: var(--navy);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            color: var(--navy);
+            opacity: 0.6;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            margin-right: 4px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Add a New Book</h1>
-    <form method="post" action="/books/add/">
-        {% csrf_token %}
-        <div>
-            <label for="name">Book Name:</label>
-            <input type="text" id="name" name="name" required>
+    <div class="container">
+        <div class="form-card">
+            <div class="form-header">
+                <h1>添加新书</h1>
+                <p>Add New Book</p>
+            </div>
+            <form method="post" action="/books/add/" class="form-body">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="name">书名</label>
+                    <input type="text" id="name" name="name" placeholder="请输入书名..." required>
+                </div>
+                <div class="form-group">
+                    <label for="author">作者</label>
+                    <input type="text" id="author" name="author" placeholder="请输入作者名..." required>
+                </div>
+                <div class="form-group">
+                    <label for="price">价格</label>
+                    <input type="number" id="price" name="price" step="0.01" placeholder="请输入价格..." required>
+                </div>
+                <div class="form-actions">
+                    <a href="/books/list/" class="btn btn-secondary">← 返回列表</a>
+                    <button type="submit" class="btn btn-primary">添加书籍 →</button>
+                </div>
+            </form>
         </div>
-        <div>
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author" required>
-        </div>
-        <div>
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" step="0.01" required>
-        </div>
-        <button type="submit">Add Book</button>
-    </form>
+        <a href="/books/list/" class="back-link">← 返回图书馆藏</a>
+    </div>
 </body>
+
 </html>
